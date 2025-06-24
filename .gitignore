@@ -1,0 +1,185 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+.packages
+pubspec.lock
+
+# Web related
+/web/
+!/web/index.html
+!/web/manifest.json
+!/web/favicon.png
+!/web/icons/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# iOS related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/UserInterfaceState.xcuserstate
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS related
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral/
+
+# Windows related
+**/windows/flutter/generated_plugin_registrant.cc
+**/windows/flutter/generated_plugin_registrant.h
+**/windows/flutter/generated_plugins.cmake
+
+# Linux related
+**/linux/flutter/generated_plugin_registrant.cc
+**/linux/flutter/generated_plugin_registrant.h
+**/linux/flutter/generated_plugins.cmake
+
+# Firebase related
+**/firebase_options.dart
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+/firebase.json
+/firestore.rules
+/firestore.indexes.json
+/storage.rules
+/database.rules
+
+# Environment and secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+**/.env
+secrets.yaml
+secrets.json
+api_keys.dart
+config/secrets.dart
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+*.config.dart
+**/generated/
+lib/generated/
+lib/l10n/generated/
+
+# Coverage reports
+coverage/
+lcov.info
+test/coverage/
+
+# Temporary backup files
+*.backup
+*.bak
+pubspec_backup.yaml
+pubspec_full.yaml
+pubspec_simple.yaml
+main_backup.dart
+main_simple.dart
+
+# Logs and crash reports
+*.log
+crashlytics-build.properties
+app.*.symbols
+app.*.map.json
+
+# Platform specific
+.metadata
+.gradle/
+local.properties
+*.keystore
+*.jks
+key.properties
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+*.swp
+*.swo
+*~
+
+# Documentation
+doc/api/
+documentation/build/
+
+# Test related
+.test_coverage/
+test/.test_coverage.dart
+integration_test/screenshots/
+
+# Build artifacts
+build/
+dist/
+out/
+release/
+
+# Package archives
+*.tar.gz
+*.zip
+*.rar
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+.hive/
+.cache/
+tmp/
