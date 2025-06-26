@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "35499160737",
+    "project_id": "true-history-32439",
+    "storage_bucket": "true-history-32439.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35499160737:android:a3c6dd05c67d299407ece0",
+        "android_client_info": {
+          "package_name": "com.knowvance.histofacts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35499160737-u3kpbor0e56a9c8kafd31pjis842gk3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsumpLTNu9bd0Ti2oMcZ3oRsCEFxsOR4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35499160737-u3kpbor0e56a9c8kafd31pjis842gk3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,10 +9,15 @@ import 'package:history_timeline/core/theme/theme_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase (temporarily disabled for testing)
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  // Initialize Firebase
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print('Firebase initialization failed: $e');
+    // Continue without Firebase for now
+  }
 
   // Initialize GraphQL (temporarily commented out until GraphQL setup is complete)
   // await GraphQLService.initialize();

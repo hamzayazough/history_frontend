@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:history_timeline/core/constants/app_constants.dart';
-import 'package:history_timeline/features/auth/presentation/login_view.dart';
+import 'package:history_timeline/features/auth/presentation/auth_view.dart';
 import 'package:history_timeline/features/home/presentation/home_view.dart';
 import 'package:history_timeline/features/timeline/presentation/region_timeline_view.dart';
 import 'package:history_timeline/features/events/presentation/event_detail_view.dart';
@@ -20,12 +20,12 @@ class AppRouter {
       GoRoute(
         path: RouteNames.splash,
         name: 'splash',
-        builder: (context, state) => const LoginView(),
+        builder: (context, state) => const AuthView(),
       ),
       GoRoute(
         path: RouteNames.login,
         name: 'login',
-        builder: (context, state) => const LoginView(),
+        builder: (context, state) => const AuthView(),
       ),
 
       // Main Navigation
