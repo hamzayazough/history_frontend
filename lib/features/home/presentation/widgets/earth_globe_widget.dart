@@ -1,17 +1,14 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:history_timeline/core/constants/app_countries.dart';
 import 'package:history_timeline/core/models/country_data.dart';
-import 'package:history_timeline/core/theme/app_theme.dart';
+import 'package:history_timeline/core/constants/app_countries.dart';
+import 'dart:math' as math;
 
 class EarthGlobeWidget extends StatefulWidget {
-  final Function(CountryData country)? onCountryTap;
-  final double radius;
+  final Function(CountryData) onCountryTap;
 
   const EarthGlobeWidget({
     super.key,
-    this.onCountryTap,
-    this.radius = 200,
+    required this.onCountryTap,
   });
 
   @override
@@ -21,258 +18,17 @@ class EarthGlobeWidget extends StatefulWidget {
 class _EarthGlobeWidgetState extends State<EarthGlobeWidget>
     with TickerProviderStateMixin {
   late AnimationController _rotationController;
-  String? _selectedContinent;
-  List<CountryData> _filteredCountries = AppCountries.allCountries;
 
   @override
   void initState() {
     super.initState();
     _rotationController = AnimationController(
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 30),
       vsync: this,
-    )..repeat();
-  }
-
-  Color _getColorByContinent(String continent) {
-    switch (continent) {
-      case 'Africa':
-        return Colors.orange;
-      case 'Asia':
-        return Colors.red;
-      case 'Europe':
-        return Colors.blue;
-      case 'North America':
-        return Colors.green;
-      case 'South America':
-        return Colors.purple;
-      case 'Oceania':
-        return Colors.cyan;
-      default:
-        return AppColors.primary;
-    }
-  }
-
-  void _onCountryTap(CountryData country) {
-    _showCountryDialog(country);
-    widget.onCountryTap?.call(country);
-  }
-
-  void _showCountryDialog(CountryData country) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: _getColorByContinent(country.continent),
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(child: Text(country.name)),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Continent: ${country.continent}'),
-            Text('Code: ${country.code}'),
-            Text(
-                'Coordinates: ${country.latitude.toStringAsFixed(2)}, ${country.longitude.toStringAsFixed(2)}'),
-            const SizedBox(height: 16),
-            Text(
-              'Explore historical events and figures from ${country.name}.',
-              style: AppTextStyles.bodyMedium,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // TODO: Navigate to country timeline
-              // context.go('${RouteNames.countryTimeline}/${country.id}');
-            },
-            child: const Text('Explore'),
-          ),
-        ],
-      ),
     );
-  }
 
-  void _filterByContinent(String? continent) {
-    setState(() {
-      _selectedContinent = continent;
-      if (continent == null) {
-        _filteredCountries = AppCountries.allCountries;
-      } else {
-        _filteredCountries = AppCountries.getByContinent(continent);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Globe visualization (placeholder with beautiful UI)
-        Expanded(
-          flex: 3,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-              gradient: RadialGradient(
-                colors: [
-                  Colors.blue.shade900,
-                  Colors.black,
-                ],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-              child: Stack(
-                children: [
-                  // Animated background stars
-                  AnimatedBuilder(
-                    animation: _rotationController,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _rotationController.value * 2 * 3.14159,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: RadialGradient(
-                              colors: [
-                                Colors.indigo.shade900,
-                                Colors.black,
-                              ],
-                            ),
-                          ),
-                          child: CustomPaint(
-                            painter: StarsPainter(),
-                            size: Size.infinite,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  // Central Earth representation
-                  Center(
-                    child: Container(
-                      width: widget.radius,
-                      height: widget.radius,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [
-                            Colors.blue.shade400,
-                            Colors.blue.shade700,
-                            Colors.blue.shade900,
-                          ],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.3),
-                            blurRadius: 30,
-                            spreadRadius: 5,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.public,
-                        size: 100,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ),
-                  // Overlay text
-                  Positioned(
-                    bottom: 20,
-                    left: 20,
-                    right: 20,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        'Interactive Earth Globe\nClick countries below to explore',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: AppDimensions.spacing16),
-
-        // Continent filter
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              _ContinentChip(
-                label: 'All',
-                isSelected: _selectedContinent == null,
-                onTap: () => _filterByContinent(null),
-              ),
-              ...AppCountries.getAllContinents().map(
-                (continent) => _ContinentChip(
-                  label: continent,
-                  color: _getColorByContinent(continent),
-                  isSelected: _selectedContinent == continent,
-                  onTap: () => _filterByContinent(continent),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppDimensions.spacing16),
-
-        // Countries grid
-        Expanded(
-          flex: 2,
-          child: GridView.builder(
-            padding: const EdgeInsets.all(8),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 2.5,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-            ),
-            itemCount: _filteredCountries.length,
-            itemBuilder: (context, index) {
-              final country = _filteredCountries[index];
-              return _CountryTile(
-                country: country,
-                color: _getColorByContinent(country.continent),
-                onTap: () => _onCountryTap(country),
-              );
-            },
-          ),
-        ),
-      ],
-    );
+    // Start auto-rotation
+    _rotationController.repeat();
   }
 
   @override
@@ -280,216 +36,229 @@ class _EarthGlobeWidgetState extends State<EarthGlobeWidget>
     _rotationController.dispose();
     super.dispose();
   }
-}
-
-class _ContinentChip extends StatelessWidget {
-  final String label;
-  final Color? color;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ContinentChip({
-    required this.label,
-    this.color,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color:
-                isSelected ? (color ?? AppColors.primary) : AppColors.grey100,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color:
-                  isSelected ? (color ?? AppColors.primary) : AppColors.grey200,
-            ),
-          ),
-          child: Text(
-            label,
-            style: AppTextStyles.labelMedium.copyWith(
-              color: isSelected ? Colors.white : AppColors.grey700,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CountryTile extends StatelessWidget {
-  final CountryData country;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _CountryTile({
-    required this.country,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.grey200),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.grey200.withOpacity(0.5),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            children: [
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  country.name,
-                  style: AppTextStyles.labelSmall,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CountryInfoWidget extends StatelessWidget {
-  final CountryData country;
-  final VoidCallback? onExplore;
-
-  const CountryInfoWidget({
-    super.key,
-    required this.country,
-    this.onExplore,
-  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.spacing16),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+        borderRadius: BorderRadius.circular(200),
         boxShadow: [
           BoxShadow(
-            color: AppColors.grey200.withOpacity(0.5),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            color: Colors.blue.withOpacity(0.3),
+            blurRadius: 20,
+            spreadRadius: 5,
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 20,
-                height: 20,
+      child: ClipOval(
+        child: Stack(
+          children: [
+            // Stars background
+            Container(
+              decoration: const BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Color(0xFF1a1a2e),
+                    Color(0xFF16213e),
+                    Color(0xFF0f0f23),
+                  ],
+                ),
+              ),
+              child: CustomPaint(
+                painter: StarsPainter(),
+                child: Container(),
+              ),
+            ), // Earth Globe - Simple 3D Globe Alternative
+            Center(
+              child: AnimatedBuilder(
+                animation: _rotationController,
+                builder: (context, child) {
+                  return Container(
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const RadialGradient(
+                        colors: [
+                          Color(0xFF4A90E2),
+                          Color(0xFF2E5BDA),
+                          Color(0xFF1E3A8A),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.5),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        // Globe texture simulation
+                        CustomPaint(
+                          painter: GlobePainter(_rotationController.value),
+                          size: const Size(300, 300),
+                        ),
+                        // Interactive overlay
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              // Simulate a country tap - for demo purposes
+                              final countries = AppCountries.allCountries;
+                              if (countries.isNotEmpty) {
+                                widget.onCountryTap(countries.first);
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(150),
+                            child: Container(
+                              width: 300,
+                              height: 300,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            // Overlay with interaction hint
+            Positioned(
+              bottom: 40,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
-                  color: _getColorByContinent(country.continent),
-                  shape: BoxShape.circle,
+                  color: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Interactive Earth Globe',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Click countries below to explore',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: AppDimensions.spacing8),
-              Expanded(
-                child: Text(
-                  country.name,
-                  style: AppTextStyles.h4,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.spacing8),
-          Text(
-            country.continent,
-            style: AppTextStyles.labelMedium.copyWith(
-              color: AppColors.grey600,
             ),
-          ),
-          const SizedBox(height: AppDimensions.spacing12),
-          if (onExplore != null)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onExplore,
-                child: const Text('Explore History'),
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Color _getColorByContinent(String continent) {
-    switch (continent) {
-      case 'Africa':
-        return Colors.orange;
-      case 'Asia':
-        return Colors.red;
-      case 'Europe':
-        return Colors.blue;
-      case 'North America':
-        return Colors.green;
-      case 'South America':
-        return Colors.purple;
-      case 'Oceania':
-        return Colors.cyan;
-      default:
-        return AppColors.primary;
+  void _handleGlobeTap(double latitude, double longitude) {
+    // Find the closest country based on coordinates
+    final country = _findCountryByCoordinates(latitude, longitude);
+    if (country != null) {
+      widget.onCountryTap(country);
     }
+  }
+
+  CountryData? _findCountryByCoordinates(double latitude, double longitude) {
+    // Simple implementation - in a real app, you'd have more precise country boundaries
+    for (final country in AppCountries.allCountries) {
+      // This is a simplified approach - you'd need actual country boundary data
+      if ((latitude - country.latitude).abs() < 10 &&
+          (longitude - country.longitude).abs() < 10) {
+        return country;
+      }
+    }
+    return null;
   }
 }
 
 class StarsPainter extends CustomPainter {
-  final Random _random = Random(42); // Fixed seed for consistent stars
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.fill;
 
-    // Draw stars
-    for (int i = 0; i < 50; i++) {
-      final x = _random.nextDouble() * size.width;
-      final y = _random.nextDouble() * size.height;
-      final radius = _random.nextDouble() * 2 + 0.5;
-
-      paint.color = Colors.white.withOpacity(_random.nextDouble() * 0.8 + 0.2);
+    // Draw random stars
+    for (int i = 0; i < 100; i++) {
+      final x = (i * 37) % size.width;
+      final y = (i * 73) % size.height;
+      final radius = (i % 3 + 1).toDouble();
       canvas.drawCircle(Offset(x, y), radius, paint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+class GlobePainter extends CustomPainter {
+  final double animationValue;
+
+  GlobePainter(this.animationValue);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.green.withOpacity(0.7)
+      ..style = PaintingStyle.fill;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
+
+    // Draw continents as simple shapes that rotate
+    for (int i = 0; i < 6; i++) {
+      final angle = (i * 60.0 + animationValue * 360) * (3.14159 / 180);
+      final x = center.dx + (radius * 0.6) * math.cos(angle);
+      final y = center.dy + (radius * 0.6) * math.sin(angle);
+
+      canvas.drawCircle(
+        Offset(x, y),
+        radius * 0.2,
+        paint,
+      );
+    }
+
+    // Draw grid lines
+    final gridPaint = Paint()
+      ..color = Colors.white.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    // Latitude lines
+    for (int i = 1; i < 5; i++) {
+      final lineRadius = radius * i / 5;
+      canvas.drawCircle(center, lineRadius, gridPaint);
+    }
+
+    // Longitude lines
+    for (int i = 0; i < 8; i++) {
+      final angle = i * 45.0 * (3.14159 / 180);
+      canvas.drawLine(
+        center,
+        Offset(
+          center.dx + radius * math.cos(angle),
+          center.dy + radius * math.sin(angle),
+        ),
+        gridPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

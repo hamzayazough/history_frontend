@@ -66,40 +66,105 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0A1628), // Dark space background
       appBar: AppBar(
-        title: const Text('Historical Timeline'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Historical Timeline',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: _signOut,
-            icon: const Icon(Icons.logout),
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
           ),
         ],
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppDimensions.spacing16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment.center,
+            radius: 1.2,
+            colors: [
+              Color(0xFF1a2f4a), // Lighter center
+              Color(0xFF0A1628), // Dark edges
+            ],
+          ),
+        ),
+        child: Stack(
           children: [
-            // Welcome Text
-            Text(
-              'Explore History Around the World',
-              style: AppTextStyles.h2,
-            ),
-            const SizedBox(height: AppDimensions.spacing8),
-            Text(
-              'Click on any country to discover its historical events and figures',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.grey600,
-              ),
-            ),
-            const SizedBox(height: AppDimensions.spacing24),
+            // Content
+            Column(
+              children: [
+                // Title section
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.spacing24,
+                    vertical: AppDimensions.spacing16,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Choose a region in the world',
+                        style: AppTextStyles.h3.copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 24,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppDimensions.spacing8),
+                      Text(
+                        'Explore History Around the World',
+                        style: AppTextStyles.h2.copyWith(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppDimensions.spacing8),
+                      Text(
+                        'Click on any country to discover its historical events and figures',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: Colors.white.withOpacity(0.7),
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
 
-            // Interactive Earth Globe with all countries
-            Expanded(
-              child: EarthGlobeWidget(
-                onCountryTap: _onCountryTap,
-                radius: 180,
-              ),
+                // Interactive Earth Globe - takes remaining space
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        maxWidth: 400,
+                        maxHeight: 400,
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: EarthGlobeWidget(
+                          onCountryTap: _onCountryTap,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Bottom spacing
+                const SizedBox(height: AppDimensions.spacing48),
+              ],
             ),
           ],
         ),
